@@ -40,6 +40,9 @@ def is_similar(img1, img2, similarity_threshold=0.9):
     similarity = mean_structured_similarity_index(img1, img2)
     return similarity >= similarity_threshold
 
+def is_identical(img1, img2):
+    return is_similar(img1, img2, similarity_threshold=0.99)
+
 
 def take_screenshots(monitor=1):
     screenshots = []
@@ -65,6 +68,7 @@ def record_screenshots_thread():
     os.environ["TOKENIZERS_PARALLELISM"] = "false"
 
     last_screenshots = take_screenshots()
+    last_screenshot_time = time.time()
 
     while True:
         if not is_user_active():
@@ -72,13 +76,14 @@ def record_screenshots_thread():
             continue
 
         screenshots = take_screenshots()
+        current_time = time.time()
 
         for i, screenshot in enumerate(screenshots):
-
             last_screenshot = last_screenshots[i]
 
-            if not is_similar(screenshot, last_screenshot):
+            if not is_similar(screenshot, last_screenshot) or ((current_time - last_screenshot_time >= 5) and is_identical(screenshot, last_screenshot)):
                 last_screenshots[i] = screenshot
+                last_screenshot_time = current_time
                 image = Image.fromarray(screenshot)
                 timestamp = int(time.time())
                 image.save(

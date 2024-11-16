@@ -6,6 +6,19 @@
 \____/ .___/\___/_/ /_/_/ |_|\___/\___/\__,_/_/_/      
     /_/                                                                                                                         
 ```
+
+python3 -m venv venv
+source venv/bin/activate  # Auf Windows: venv\Scripts\activate
+pip install -e .
+cd openrecall
+python app.py
+
+
+
+
+
+
+
 **Enjoy this project?** Show your support by starring it! ⭐️ Thank you!
 
 Join our [Discord](https://discord.gg/RzvCYRgUkx) and/or [Telegram](https://t.me/+5DULWTesqUYwYjY0) community to stay informed of updates!
