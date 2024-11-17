@@ -4,7 +4,7 @@ from typing import Any, List
 
 from openrecall.config import db_path
 
-Entry = namedtuple("Entry", ["id", "app", "title", "text", "timestamp", "embedding"])
+Entry = namedtuple("Entry", ["id", "app", "title", "text", "timestamp", "embedding", "description"])
 
 
 def create_db() -> None:
