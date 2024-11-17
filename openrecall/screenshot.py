@@ -1,5 +1,6 @@
 import os
 import time
+import gc  # Hinzugefügt
 
 import mss
 import numpy as np
@@ -99,4 +100,8 @@ def record_screenshots_thread():
                     text, timestamp, embedding, active_app_name, active_window_title
                 )
 
-        time.sleep(3)
+        # Freigeben der nicht mehr benötigten Screenshots
+        del screenshots
+        gc.collect()
+
+        time.sleep(1)
