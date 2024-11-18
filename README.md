@@ -8,7 +8,9 @@
 ```
 
 python3 -m venv venv
-source venv/bin/activate  # Auf Windows: venv\Scripts\activate
+source venv/bin/activate  
+# Auf Windows: 
+.\venv\Scripts\activate
 pip install -e .
 cd openrecall
 python app.py
