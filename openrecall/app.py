@@ -1,4 +1,5 @@
 from threading import Thread
+from datetime import datetime
 
 import numpy as np
 from flask import Flask, render_template_string, request, send_from_directory
@@ -86,12 +87,27 @@ app.jinja_env.loader = StringLoader()
 
 @app.route("/")
 def timeline():
-    # connect to db
-    timestamps = get_timestamps()
+    date_str = request.args.get("date")
+    if not date_str:
+        date_str = datetime.now().strftime("%Y-%m-%d")
+    selected_date = datetime.strptime(date_str, "%Y-%m-%d").date()
+    timestamps = [ts for ts in get_timestamps() if datetime.fromtimestamp(ts).date() == selected_date]
+    all_dates = {datetime.fromtimestamp(ts).date().strftime("%Y-%m-%d") for ts in get_timestamps()}
+
     return render_template_string(
         """
 {% extends "base_template" %}
 {% block content %}
+<div class="container">
+  <form class="form-inline my-2 my-lg-0 w-100 d-flex" action="/" method="get" id="dateForm">
+    <input class="form-control mr-sm-2" style="width: 200px;" type="date" name="date" placeholder="Select Date" aria-label="Select Date" value="{{ request.args.get('date', '') or date_str }}" onchange="document.getElementById('dateForm').submit();" list="datesWithScreenshots">
+    <datalist id="datesWithScreenshots">
+      {% for date in all_dates %}
+        <option value="{{ date }}"></option>
+      {% endfor %}
+    </datalist>
+  </form>
+</div>
 {% if timestamps|length > 0 %}
   <div class="container">
     <div class="slider-container">
@@ -119,6 +135,7 @@ def timeline():
     slider.value = timestamps.length - 1;
     sliderValue.textContent = new Date(timestamps[0] * 1000).toLocaleString();  // Convert to human-readable format
     timestampImage.src = `/static/${timestamps[0]}.webp`;
+
   </script>
 {% else %}
   <div class="container">
@@ -130,6 +147,8 @@ def timeline():
 {% endblock %}
 """,
         timestamps=timestamps,
+        date_str=date_str,
+        all_dates=all_dates,
     )
 
 
