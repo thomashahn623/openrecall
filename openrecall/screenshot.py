@@ -36,7 +36,7 @@ def mean_structured_similarity_index(img1, img2, L=255):
     return ssim_index
 
 
-def is_similar(img1, img2, similarity_threshold=0.9):
+def is_similar(img1, img2, similarity_threshold=0.99):
     similarity = mean_structured_similarity_index(img1, img2)
     return similarity >= similarity_threshold
 
@@ -81,7 +81,7 @@ def record_screenshots_thread():
         for i, screenshot in enumerate(screenshots):
             last_screenshot = last_screenshots[i]
 
-            if not is_similar(screenshot, last_screenshot) or ((current_time - last_screenshot_time >= 5) and is_identical(screenshot, last_screenshot)):
+            if not is_similar(screenshot, last_screenshot):
                 last_screenshots[i] = screenshot
                 last_screenshot_time = current_time
                 image = Image.fromarray(screenshot)
