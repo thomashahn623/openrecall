@@ -43,10 +43,16 @@ base_template = """
     .image-container {
       margin-top: 20px;
       text-align: center;
+      width: 100%;
     }
     .image-container img {
-      max-width: 100%;
+      width: 100%;  /* Ändere max-width zu width */
       height: auto;
+      margin: 0 auto;
+    }
+    .container {
+      width: 100%;
+      margin: 0 auto;
     }
   </style>
 </head>
@@ -114,10 +120,11 @@ def timeline():
       <input type="range" class="slider custom-range" id="discreteSlider" min="0" max="{{timestamps|length - 1}}" step="1" value="{{timestamps|length - 1}}">
       <div class="slider-value" id="sliderValue">{{timestamps[0] | timestamp_to_human_readable }}</div>
     </div>
-    <div class="image-container">
+    
+  </div>
+  <div class="image-container">
       <img id="timestampImage" src="/static/{{timestamps[0]}}.webp" alt="Image for timestamp">
     </div>
-  </div>
   <script>
     const timestamps = {{ timestamps|tojson }};
     const slider = document.getElementById('discreteSlider');
