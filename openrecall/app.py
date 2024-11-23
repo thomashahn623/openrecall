@@ -98,7 +98,7 @@ def timeline():
         date_str = datetime.now().strftime("%Y-%m-%d")
     selected_date = datetime.strptime(date_str, "%Y-%m-%d").date()
     timestamps = [ts for ts in get_timestamps() if datetime.fromtimestamp(ts).date() == selected_date]
-    all_dates = {datetime.fromtimestamp(ts).date().strftime("%Y-%m-%d") for ts in get_timestamps()}
+    all_dates = sorted({datetime.fromtimestamp(ts).date().strftime("%Y-%m-%d") for ts in get_timestamps()}, reverse=True)
 
     return render_template_string(
         """
