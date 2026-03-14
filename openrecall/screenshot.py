@@ -30,6 +30,8 @@ def mean_structured_similarity_index(
     Returns:
         The MSSIM value between the two images (float between -1 and 1).
     """
+    if img1.shape != img2.shape:
+        return 0
     K1, K2 = 0.01, 0.03
     C1, C2 = (K1 * L) ** 2, (K2 * L) ** 2
 
